@@ -1,57 +1,15 @@
-import json
-import socket
 import time, os
 import traceback
 import csv
 import random
-import requests
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from datetime import date
 from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 
-
-def send_browser():
-    try:
-        os.system('taskkill /im chromedriver.exe /F')
-        os.system('taskkill /im chrome.exe /F')
-        options = Options()
-        options.add_argument("--lang=en")
-        options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        options.add_argument("--user-data-dir=C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome Beta\\User Data")
-        options.binary_location = "C:\\Program Files\\Google\\Chrome Beta\\Application\\chrome.exe"
-        service = Service(executable_path=r"C:\Program Files\Google\Chrome Beta\Application\chromedriver.exe")
-        bot = webdriver.Chrome(service=service, options=options)
-        return bot
-    except Exception as e:
-        print(e.args)
-        os.system('taskkill /im chromedriver.exe /F')
-        os.system('taskkill /im chrome.exe /F')
-
-
-# 钉钉预警
-def dingtalk(msg, ding_bodys):
-    webhook = "https://oapi.dingtalk.com/robot/send?access_token" \
-              "=86addaf9ad29dd428ccdffcb16469f0809a1d0389c72fe3bce320c0f04396c88"
-    headers = {'Content-Type': 'application/json; charset=utf-8'}
-
-    data = {
-        'msgtype': 'text', 'text': {'title': "自动上传油管", "content": msg},
-        'at': {'atMobiles': ding_bodys, 'isAtAll': False}
-    }
-    post_data = json.dumps(data)
-    response = requests.post(webhook, headers=headers, data=post_data)
-    return response.text
-
-
-def get_ip():
-    myname = socket.getfqdn(socket.gethostname())
-    myaddr = socket.gethostbyname(myname)
-    return myaddr
+from base.base import send_browser
+from base.base import dingtalk
+from base.base import get_ip
 
 
 def get_title_content(file):
