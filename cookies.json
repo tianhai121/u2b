@@ -1,0 +1,66 @@
+[
+    {
+        "domain": ".like4like.org",
+        "expirationDate": 1711459485.309211,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "_ga",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "session": false,
+        "storeId": null,
+        "value": "GA1.1.2071655782.1676896690"
+    },
+    {
+        "domain": ".like4like.org",
+        "expirationDate": 1711459485.314191,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "_ga_DVWFX221E1",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "session": false,
+        "storeId": null,
+        "value": "GS1.1.1676899470.2.1.1676899485.0.0.0"
+    },
+    {
+        "domain": ".like4like.org",
+        "expirationDate": 1676899530,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "_gat_gtag_UA_21175192_9",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "session": false,
+        "storeId": null,
+        "value": "1"
+    },
+    {
+        "domain": ".like4like.org",
+        "expirationDate": 1676985885,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "_gid",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "session": false,
+        "storeId": null,
+        "value": "GA1.2.1799095099.1676896690"
+    },
+    {
+        "domain": ".like4like.org",
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "PHPSESSID",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": true,
+        "session": true,
+        "storeId": null,
+        "value": "tkgr203vck5qflb2hl2j6d22al"
+    }
+]
