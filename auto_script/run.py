@@ -1,3 +1,6 @@
+import os
+
+import requests
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
@@ -5,7 +8,22 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
-import time, json,traceback
+import time, json, traceback
+
+
+# 钉钉预警
+def dingtalk(msg, ding_bodys):
+    webhook = "https://oapi.dingtalk.com/robot/send?access_token" \
+              "=86addaf9ad29dd428ccdffcb16469f0809a1d0389c72fe3bce320c0f04396c88"
+    headers = {'Content-Type': 'application/json; charset=utf-8'}
+
+    data = {
+        'msgtype': 'text', 'text': {'title': "自动上传油管", "content": msg},
+        'at': {'atMobiles': ding_bodys, 'isAtAll': False}
+    }
+    post_data = json.dumps(data)
+    response = requests.post(webhook, headers=headers, data=post_data)
+    return response.text
 
 
 class AMFBot:
@@ -45,8 +63,11 @@ class AMFBot:
         flag = True
         while flag:
             try:
-                bot.find_element(By.CSS_SELECTOR, "a[class^='cursor earn_pages_button profile_view_img']").click()
-                time.sleep(5)
+                to_like_path = "a[class^='cursor earn_pages_button profile_view_img']"
+                to_like = WebDriverWait(bot, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, to_like_path)))
+                if to_like.is_displayed():
+                    to_like.click()
+                time.sleep(3)
                 bot.switch_to.window(bot.window_handles[1])
                 # window
                 # try:
@@ -101,11 +122,15 @@ class AMFBot:
                 #     bot.get("https://www.like4like.org/earn-credits.php?feature=twitterfav")
                 #     ed.twttwo()
                 #
-                like_path = '//div[@role="group"]/div[3]/div[@aria-label="Like"]'
-                like = WebDriverWait(bot, 10).until(EC.presence_of_element_located((By.XPATH, like_path)))
-                if like.is_displayed():
-                    like.click()
-                time.sleep(2)
+
+                try:
+                    like_path = '//div[@role="group"]/div[3]/div[@aria-label="Like"]'
+                    like = WebDriverWait(bot, 10).until(EC.presence_of_element_located((By.XPATH, like_path)))
+                    if like.is_displayed():
+                        like.click()
+                    time.sleep(2)
+                except:
+                    pass
                 # window
                 bot.close()
                 bot.switch_to.window(bot.window_handles[0])
@@ -120,32 +145,16 @@ class AMFBot:
                 print(traceback.format_exc())
                 flag = False
                 bot.quit()
-
-    def twttwo(self):
-        bot = self.bot
-        try:
-            confirm = bot.find_element(By.CSS_SELECTOR, "a[class^='cursor pulse-checkBox']")
-            if confirm.is_displayed():
-                confirm.click()
-                time.sleep(3)
-                bot.find_element(By.CSS_SELECTOR, "a[class^='cursor earn_pages_button profile_view_img']").click()
-                bot.switch_to.window(bot.window_handles[1])
-                # window
-            else:
-                bot.find_element(By.CSS_SELECTOR, "a[class^='cursor earn_pages_button profile_view_img']").click()
-                bot.switch_to.window(bot.window_handles[1])
-                time.sleep(5)
-        except:
-            bot.find_element(By.CSS_SELECTOR, "a[class^='cursor earn_pages_button profile_view_img']").click()
-            bot.switch_to.window(bot.window_handles[1])
-            time.sleep(3)
-
-        # window
-        bot.close()
-        bot.switch_to.window(bot.window_handles[0])
-        time.sleep(3)
-        ed.twttwo()
+        dingtalk("获取积分失败", [13143351231])
 
 
-ed = AMFBot('hai050400@gmail.com', 'zaq1xsw2a@!')
-ed.open()
+if __name__ == "__main__":
+    # 列出所有正在运行的进程
+    tasklist_output = os.popen('tasklist').read()
+    # 搜索名为"chromedriver.exe"的进程
+    if 'chromedriver.exe' in tasklist_output or 'chrome.exe' in tasklist_output:
+        # 关闭名为"chromedriver.exe"的进程
+        os.system('taskkill /f /im chromedriver.exe')
+        os.system('taskkill /f /im chrome.exe')
+    ed = AMFBot('hai050400@gmail.com', 'zaq1xsw2a@!')
+    ed.open()
