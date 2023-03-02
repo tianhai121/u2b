@@ -2,8 +2,9 @@ import time, os
 import traceback
 import csv
 import random
+import logging
 from selenium.webdriver.common.by import By
-from datetime import date
+from datetime import date, datetime,timedelta
 from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -12,12 +13,22 @@ from base.base import dingtalk
 from base.base import get_ip
 
 
+filename=r'C:\u2b\log\meiguo.log'
+if not filename:
+    os.mkdir(filename)
+logging.basicConfig(
+    filename=filename,
+    level=logging.WARNING,
+    format='%(levelname)s:%(asctime)s:%(message)s'
+)
 def get_title_content(file):
     with open(file, 'r') as file:
-        reader = csv.reader(file)
+        reader = csv.reader(file, delimiter=';')
         rows = list(reader)
         random_row = random.choice(rows)
-        return random_row[0], ','.join(random_row[1:])
+        title = random_row[0]
+        content = random_row[1]
+        return title, content
 
 
 def upload_video(bot, video_dir, nameofvid, title, content):
@@ -81,32 +92,30 @@ def upload_video(bot, video_dir, nameofvid, title, content):
         print(traceback.format_exc())
 
 
-def main(video_dir):
-    today = date.today()
+def main(video_dir,title_file):
+    now = datetime.utcnow()+timedelta(hours=8)
     try:
         bot = send_browser()
         file_name_lst = sorted(os.listdir(video_dir))
         for n, filename in enumerate(file_name_lst, 1):
-            title_file = r"C:\u2b\title_content.csv"
             title, content = get_title_content(title_file)
             upload_video(bot, video_dir, filename, title, content)
             break
     except Exception as e:
         err_msg = traceback.format_exc()
         print(err_msg)
-        msg = "{}失败".format(today) + err_msg + "\n美国IP:{}".format(get_ip())
-        dingtalk(msg, "13143351231")
+        msg = "{}失败".format(now) + err_msg + "\n美国IP:{}".format(get_ip())
+        logging.error(msg)
+        dingtalk("美国上传失败，日期{}".format(now), "13143351231")
 
 
 if __name__ == "__main__":
-    # 11点开始奇数发布
-    import datetime
-
     video_dir = r"C:\Users\Administrator\Desktop\upload_videos"
+    title_file = r'C:\u2b\title_content.csv'
     if not os.path.exists(video_dir):
         os.mkdir(video_dir)
 
-    now_hour = datetime.datetime.now().hour
+    now_hour = datetime.utcnow().hour - 6
     # if now_hour in (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22):
-    if now_hour in (1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23):
-        main(video_dir)
+    if now_hour in (7, 12, 19, 23):
+        main(video_dir,title_file)

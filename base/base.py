@@ -12,7 +12,7 @@ from selenium.webdriver.chrome.service import Service
 
 project_dir = os.getcwd()
 logging.basicConfig(
-    filename=os.path.join(project_dir, 'log/log/log'),
+    filename=r'C:\u2b\log\log.log',
     level=logging.WARNING,
     format='%(levelname)s:%(asctime)s:%(message)s'
 )
@@ -46,10 +46,8 @@ def send_browser():
         options = Options()
         options.add_argument("--lang=en")
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        # options.add_argument("--user-data-dir=C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome Beta\\User Data")
+        options.add_argument("--user-data-dir=C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome Beta\\User Data")
         options.binary_location = "C:\\Program Files\\Google\\Chrome Beta\\Application\\chrome.exe"
-        options.add_argument(
-            "--user-data-dir=C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome Beta\\User Data\\Default")
         service = Service(executable_path=r"C:\Program Files\Google\Chrome Beta\Application\chromedriver.exe")
         bot = webdriver.Chrome(service=service, options=options)
         return bot
