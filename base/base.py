@@ -10,9 +10,11 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 
-project_dir = os.getcwd()
+log_dir = r'C:\Users\Administrator\PycharmProjects\u2b\log'
+if not os.path.exists(log_dir):
+    os.mkdir(log_dir)
 logging.basicConfig(
-    filename=r'C:\u2b\log\log.log',
+    filename=log_dir+r'/log.log',
     level=logging.WARNING,
     format='%(levelname)s:%(asctime)s:%(message)s'
 )
